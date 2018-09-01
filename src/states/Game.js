@@ -14,10 +14,10 @@ export default class extends Phaser.State {
       for (let j = 0; j < 11; j++) {
         const unit = new Unit({
           game: this.game,
-          x: 50 + i * 41,
-          y: 0.45 * this.world.centerY + 22 + j * 41,
+          x: 50 + i * 42,
+          y: 175 + j * 41,
           asset: 'blue'
-        }, 0.2)
+        })
         this.game.add.existing(unit)
       }
     }
