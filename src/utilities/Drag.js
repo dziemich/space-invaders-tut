@@ -1,3 +1,5 @@
+import Phaser from 'phaser'
+
 export default (game, unit) => {
   let initCursorPositionX = null
   let initCursorPositionY = null
@@ -5,6 +7,10 @@ export default (game, unit) => {
   let noChangeHappened = true
   let initialX = unit.x
   let initialY = unit.y
+
+  let slideBoundary = 115
+  unit.input.boundsRect = new Phaser.Rectangle(unit.x - slideBoundary / 2,
+    unit.y - slideBoundary / 2, slideBoundary, slideBoundary)
 
   const dragStart = () => {
     unit.scale.setTo(1.2)

@@ -1,43 +1,61 @@
 import Phaser from 'phaser-ce/build/custom/phaser-split'
+import Drag from '../utilities/Drag'
 
-export default class extends Phaser.Sprite {
-  constructor ({
-    game,
-    x,
-    y,
-    asset
-  }, xArrayPos, yArrayPos) {
-    super(game, x, y, asset)
-    this.anchor.setTo(0.5)
-    this.inputEnabled = true
-    this.input.enableDrag()
-    // this.input.setDragLock(true, false)
+export default (width, height) => {
+  const constructUnit = (spriteConfig, xArrayPos, yArrayPos) => {
+    let unit = new Phaser.Sprite(spriteConfig.game, spriteConfig.x, spriteConfig.y, spriteConfig.asset)
+    unit.anchor.setTo(0.5)
+    unit.inputEnabled = true
+    unit.input.enableDrag()
+    // unit.input.setDragLock(true, false)
 
+    unit.neighbors = {
+      up: null,
+      down: null,
+      left: null,
+      right: null
+    }
 
+    unit.arrayCoords = {
+      x: xArrayPos,
+      y: yArrayPos
+    }
 
-    this.neighbors = []
-    this.xArrayPos = xArrayPos
-    this.yArrayPos = yArrayPos
-
-
-    let slideBoundary = 115
-    this.input.boundsRect = new Phaser.Rectangle(this.x - slideBoundary / 2,
-      this.y - slideBoundary / 2, slideBoundary, slideBoundary)
-
-    // bindings
-    this.dragStart = this.dragStart.bind(this)
-    this.dragUpdate = this.dragUpdate.bind(this)
-    this.dragStop = this.dragStop.bind(this)
+    const drag = Drag(spriteConfig.game, unit)
 
     // events
-    this.events.onDragStart.add(this.dragStart)
-    this.events.onDragUpdate.add(this.dragUpdate)
-    this.events.onDragStop.add(this.dragStop)
+    unit.events.onDragStart.add(drag.dragStart)
+    unit.events.onDragUpdate.add(drag.dragUpdate)
+    unit.events.onDragStop.add(drag.dragStop)
+
+    return unit
   }
 
-
-  findNeighbors () {
-
+  const findNeighbors = (unitArray) => {
+    unitArray.forEach(unit => {
+      let x = unit.arrayCoords.x
+      let y = unit.arrayCoords.y
+      if (y > 0) {
+        unit.neighbors.up = unitArray[(y - 1) * width + x]
+      }
+      if (y < height - 1) {
+        unit.neighbors.down = unitArray[(y + 1) * width + x]
+      }
+      if (x > 0) {
+        unit.neighbors.left = unitArray[y * width + x - 1]
+      }
+      if (x < width - 1) {
+        unit.neighbors.right = unitArray[y * width + x + 1]
+      }
+      console.log(x + ' ' + y)
+      console.log(unit.neighbors)
+    })
   }
-  update () {}
+  //
+  //   const update = () => {}
+  //
+  return {
+    constructUnit,
+    findNeighbors
+  }
 }

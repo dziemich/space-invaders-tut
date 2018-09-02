@@ -1,16 +1,17 @@
-import Unit from '../sprites/Unit'
+import UnitFactory from '../sprites/Unit'
 
-export default (game) => {
+export default (game, width, height) => {
+  const unitFactory = UnitFactory(width, height)
   const createUnitBoard = () => {
     let units = []
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 11; j++) {
-        const unit = new Unit({
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const unit = unitFactory.constructUnit({
           game: game,
-          x: 65 + i * 42,
-          y: 190 + j * 41,
+          x: 65 + j * 42,
+          y: 190 + i * 41,
           asset: assetType()
-        })
+        }, j, i)
         units.push(unit)
       }
     }
@@ -18,6 +19,7 @@ export default (game) => {
   }
 
   const printBoard = (array) => {
+    console.log(array)
     array.forEach(element => {
       game.add.existing(element)
     })
