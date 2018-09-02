@@ -11,9 +11,12 @@ export default class extends Phaser.State {
     this.loaderBar.anchor.setTo(0.5)
 
     this.load.setPreloadSprite(this.loaderBar)
-    //
-    // load your assets
-    //
+
+    this.load.image('red', 'assets/images/game_sprites/red.png')
+    this.load.image('blue', 'assets/images/game_sprites/blue.png')
+    this.load.image('yellow', 'assets/images/game_sprites/yellow.png')
+    this.load.image('green', 'assets/images/game_sprites/green.png')
+    this.load.image('bg', 'assets/images/game_sprites/bg.png')
   }
 
   create () {

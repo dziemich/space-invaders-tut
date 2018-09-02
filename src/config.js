@@ -1,6 +1,6 @@
 export default {
-  gameWidth: 760,
-  gameHeight: 400,
+  gameWidth: 375,
+  gameHeight: 667,
   localStorageName: 'space-invaders-tut',
   webfonts: ['Lobster']
 }
