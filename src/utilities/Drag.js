@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import detect from '../utilities/Detect'
 
 export default (game, unit) => {
   let initCursorPositionX = null
@@ -12,6 +13,12 @@ export default (game, unit) => {
   unit.input.boundsRect = new Phaser.Rectangle(unit.x - slideBoundary / 2,
     unit.y - slideBoundary / 2, slideBoundary, slideBoundary)
 
+  const checkOverlap = (spriteA, spriteB) => {
+    var boundsA = spriteA.getBounds()
+    var boundsB = spriteB.getBounds()
+
+    return Phaser.Rectangle.intersects(boundsA, boundsB)
+  }
   const dragStart = () => {
     unit.scale.setTo(1.2)
   }
@@ -45,6 +52,14 @@ export default (game, unit) => {
   }
 
   const dragStop = () => {
+    Object.entries(unit.neighbors).forEach(direction => {
+      if (direction[1] !== null) {
+        if (checkOverlap(unit, direction[1])) {
+          detect(unit)
+          detect(direction[1])
+        }
+      }
+    })
     initCursorPositionX = null
     initCursorPositionY = null
     lockedAxis = false
@@ -54,6 +69,14 @@ export default (game, unit) => {
       unit.y = initialY
     }
   }
+
+  // const detect = (unit) => {
+  //   Object.entries(unit.neighbors).forEach(direction => {
+  //     if (unit.color === direction[1].color) {
+  //       console.log('color matches')
+  //     }
+  //   })
+  // }
 
   return {
     dragStart,

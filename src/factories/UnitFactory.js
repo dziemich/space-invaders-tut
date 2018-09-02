@@ -2,12 +2,12 @@ import Phaser from 'phaser-ce/build/custom/phaser-split'
 import Drag from '../utilities/Drag'
 
 export default (width, height) => {
-  const constructUnit = (spriteConfig, xArrayPos, yArrayPos) => {
-    let unit = new Phaser.Sprite(spriteConfig.game, spriteConfig.x, spriteConfig.y, spriteConfig.asset)
+  const constructUnit = (spriteConfig, xArrayPos, yArrayPos, color) => {
+    let unit = new Phaser.Sprite(spriteConfig.game, spriteConfig.x,
+      spriteConfig.y, spriteConfig.asset)
     unit.anchor.setTo(0.5)
     unit.inputEnabled = true
     unit.input.enableDrag()
-    // unit.input.setDragLock(true, false)
 
     unit.neighbors = {
       up: null,
@@ -20,6 +20,8 @@ export default (width, height) => {
       x: xArrayPos,
       y: yArrayPos
     }
+    unit.color = color
+    unit.detected = false
 
     const drag = Drag(spriteConfig.game, unit)
 
@@ -47,8 +49,8 @@ export default (width, height) => {
       if (x < width - 1) {
         unit.neighbors.right = unitArray[y * width + x + 1]
       }
-      console.log(x + ' ' + y)
-      console.log(unit.neighbors)
+      // console.log(x + ' ' + y)
+      // console.log(unit.neighbors)
     })
   }
   //
