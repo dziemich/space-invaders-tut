@@ -1,53 +1,36 @@
-/**
- * @param unit
- * @param lines
- * {
- *   up: 1,
- *   down: 1,
- *   left: 1,
- *   right: 1
- * }
- */
 
-const detectChange = (unit) => {
-  let up = unit.neighbors.up
-  let down = unit.neighbors.down
-  let left = unit.neighbors.left
-  let right = unit.neighbors.right
-  // console.log('up')
-  // console.log(up)
-  // console.log('down')
-  // console.log(down)
-  // console.log('left')
-  // console.log(left)
-  // console.log('right')
-  // console.log(right)
-  if (up !== null && down !== null) {
-    if (up.color === unit.color && down.color === unit.color) {
-      return countBricksInLine(up, 'up', 1) + countBricksInLine(dow, 'down', 1) + 1
+export default (color, directions) => {
+  //console.log('detect called')
+  if (directions.up && directions.down) {
+    if (directions.up.color === color && directions.down.color === color) {
+      let unitsUp = [directions.up]
+      let unitsDown = [directions.down]
+      let x = countUnitsInLine(unitsUp, 'up') + countUnitsInLine(unitsDown, 'down')
+      console.log(x)
+      return x
     }
   }
-  if (left !== null && right !== null) {
-    if (left.color === unit.color && right.color === unit.color) {
-      return countBricksInLine(left, 'left', 1) + countBricksInLine(right,
-        'right', 1) + 1
+  if (directions.left && directions.right) {
+    if (directions.left.color === color && directions.right.color === color) {
+      let unitsLeft = [directions.left]
+      let unitsRight = [directions.right]
+      let x = countUnitsInLine(unitsLeft, 'left') + countUnitsInLine(unitsRight, 'right')
+      console.log(x)
+      return x
     }
   }
-  if (up !== null && up.color === unit.color) {
-    return countBricksInLine(up, 'up', 1)
-  }
-  if (down !== null && down.color === unit.color) {
-    return countBricksInLine(down, 'down', 1)
-  }
-  if (left !== null && left.color === unit.color) {
-    return countBricksInLine(left, 'left', 1)
-  }
-  if (right !== null && right.color === unit.color) {
-    return countBricksInLine(right, 'right', 1)
-  }
+  Object.entries(directions).forEach(neighbor => {
+    if (color === neighbor[1].color) {
+      let units = [neighbor[1]]
+      let x = countUnitsInLine(units, neighbor[0])
+      console.log(x)
+      return x
+    }
+  })
   return 0
 }
-const countBricksInLine = (unit, direction, count) => {
+const countUnitsInLine = (units, direction) => {
+  let unit = units[units.length - 1]
   let neighborChecked = null
   switch (direction) {
     case 'up':
@@ -72,17 +55,47 @@ const countBricksInLine = (unit, direction, count) => {
       break
   }
   if (neighborChecked === null || neighborChecked.color !== unit.color) {
-    return count
+    return units
   }
-  return countBricksInLine(neighborChecked, direction, ++count)
+  units.push(neighborChecked)
+  return countUnitsInLine(units, direction)
 }
 
-export default (unit) => {
-  console.log('called')
-  let unitsInLine = detectChange(unit)
-  if (unitsInLine >= 3) {
-    console.log('shift happening ' + unitsInLine)
-  } else {
-    console.log('not enough' + unitsInLine)
-  }
-}
+// if (unitsInLine >= 3) {
+//   console.log('shift happening ' + unitsInLine)
+// } else {
+//   console.log('not enough' + unitsInLine)
+// }
+
+// if (up !== null && down !== null) {
+//   if (up.color === unit.color && down.color === unit.color) {
+//     //return countUnitsInLine(up, 'up', 1) + countUnitsInLine(down, 'down', 1) + 1
+//     console.log('up and down of the same color')
+//   }
+// }
+// if (left !== null && right !== null) {
+//   if (left.color === unit.color && right.color === unit.color) {
+//     //return countUnitsInLine(left, 'left', 1) + countUnitsInLine(right,
+//       //'right', 1) + 1
+//     console.log('left and right of the same color')
+//
+//   }
+// }
+// if (up && up.color === unit.color) {
+//   // return countUnitsInLine(up, 'up', 1)
+//   console.log('up of the same color')
+//
+// }
+// if (down && down.color === unit.color) {
+//   console.log('down of the same color')
+//   // return countUnitsInLine(down, 'down', 1)
+// }
+// if (left && left.color === unit.color) {
+//   console.log('left of the same color')
+//   // return countUnitsInLine(left, 'left', 1)
+// }
+// if (right && right.color === unit.color) {
+//   console.log('right of the same color')
+//   // return countUnitsInLine(right, 'right', 1)
+// }
+// return 0

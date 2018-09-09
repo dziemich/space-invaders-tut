@@ -55,11 +55,39 @@ export default (game, unit) => {
     Object.entries(unit.neighbors).forEach(direction => {
       if (direction[1] !== null) {
         if (checkOverlap(unit, direction[1])) {
-          detect(unit)
-          detect(direction[1])
+          let validDirectionsForUnit = removeSelfForChecking(direction)
+          let validDirectionsForDirection = removeSelfForChecking(unit)
+          let unitsToBeDestroyedU = detect(unit.color, validDirectionsForUnit)
+          let unitsToBeDestroyedD = detect(direction[1].color, validDirectionsForDirection)
+          console.log('arr ')
+          console.log(unitsToBeDestroyedU)
+          // console.log(unitsToBeDestroyedD)
+          console.log('length: ' + unitsToBeDestroyedU.length)
+          // console.log(unitsToBeDestroyedD.length)
+          // if (unitsToBeDestroyedU.length >= 2) {
+          //   unitsToBeDestroyedU.forEach(sprite => {
+          //     sprite.destroy()
+          //   })
+          // }
+          // if (unitsToBeDestroyedD.length >= 2) {
+          //   unitsToBeDestroyedU.forEach(sprite => {
+          //     sprite.destroy()
+          //   })
+          // }
+
+          // if (detect(direction[1].color, validDirectionsForDirection) >= 3) {
+          //   // perform switcheroo
+          //   console.log('destruction started')
+          //
+          //   unit.destroy()
+          //   direction[1].destroy()
+          //
+          //   console.log('destruction finished ' + unit.color)
+          // }
         }
       }
     })
+    // TODO when the change happens the dragging is flawed -> clicking on the changed
     initCursorPositionX = null
     initCursorPositionY = null
     lockedAxis = false
@@ -69,14 +97,31 @@ export default (game, unit) => {
       unit.y = initialY
     }
   }
-
-  // const detect = (unit) => {
-  //   Object.entries(unit.neighbors).forEach(direction => {
-  //     if (unit.color === direction[1].color) {
-  //       console.log('color matches')
-  //     }
-  //   })
-  // }
+  // TODO figure a cleaner way for this function
+  const removeSelfForChecking = direction => {
+    let valid = {}
+    if (direction[0] === 'up') {
+      if (direction[1].neighbors.up) valid.up = direction[1].neighbors.up
+      if (direction[1].neighbors.left) valid.left = direction[1].neighbors.left
+      if (direction[1].neighbors.right) valid.right = direction[1].neighbors.right
+    }
+    if (direction[0] === 'down') {
+      if (direction[1].neighbors.down) valid.down = direction[1].neighbors.down
+      if (direction[1].neighbors.left) valid.left = direction[1].neighbors.left
+      if (direction[1].neighbors.right) valid.right = direction[1].neighbors.right
+    }
+    if (direction[0] === 'left') {
+      if (direction[1].neighbors.up) valid.up = direction[1].neighbors.up
+      if (direction[1].neighbors.down) valid.down = direction[1].neighbors.down
+      if (direction[1].neighbors.left) valid.left = direction[1].neighbors.left
+    }
+    if (direction[0] === 'right') {
+      if (direction[1].neighbors.up) valid.up = direction[1].neighbors.up
+      if (direction[1].neighbors.down) valid.down = direction[1].neighbors.down
+      if (direction[1].neighbors.right) valid.right = direction[1].neighbors.right
+    }
+    return valid
+  }
 
   return {
     dragStart,
@@ -84,3 +129,9 @@ export default (game, unit) => {
     dragStop
   }
 }
+// const newUnit = factory.constructUnit(
+//               {game: game, x: unit.x, y: unit.y, asset: unit.color},
+//               unit.arrayCoords.x, unit.arrayCoords.y, unit.color)
+//             const newDirection = factory.constructUnit(
+//               {game: game, x: unit.x, y: unit.y, asset: unit.color},
+//               unit.arrayCoords.x, unit.arrayCoords.y, unit.color)
