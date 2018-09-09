@@ -57,33 +57,12 @@ export default (game, unit) => {
         if (checkOverlap(unit, direction[1])) {
           let validDirectionsForUnit = removeSelfForChecking(direction)
           let validDirectionsForDirection = removeSelfForChecking(unit)
-          let unitsToBeDestroyedU = detect(unit.color, validDirectionsForUnit)
-          let unitsToBeDestroyedD = detect(direction[1].color, validDirectionsForDirection)
-          console.log('arr ')
+          let unitsToBeDestroyedU = detect(unit, validDirectionsForUnit)
+          // let unitsToBeDestroyedD = detect(direction[1].color, validDirectionsForDirection)
           console.log(unitsToBeDestroyedU)
-          // console.log(unitsToBeDestroyedD)
-          console.log('length: ' + unitsToBeDestroyedU.length)
-          // console.log(unitsToBeDestroyedD.length)
-          // if (unitsToBeDestroyedU.length >= 2) {
-          //   unitsToBeDestroyedU.forEach(sprite => {
-          //     sprite.destroy()
-          //   })
-          // }
-          // if (unitsToBeDestroyedD.length >= 2) {
-          //   unitsToBeDestroyedU.forEach(sprite => {
-          //     sprite.destroy()
-          //   })
-          // }
-
-          // if (detect(direction[1].color, validDirectionsForDirection) >= 3) {
-          //   // perform switcheroo
-          //   console.log('destruction started')
-          //
-          //   unit.destroy()
-          //   direction[1].destroy()
-          //
-          //   console.log('destruction finished ' + unit.color)
-          // }
+          if (unitsToBeDestroyedU.length >= 3) {
+            unitsToBeDestroyedU.forEach(unit => unit.kill())
+          }
         }
       }
     })
