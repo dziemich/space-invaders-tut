@@ -56,11 +56,13 @@ export default (game, unit) => {
       if (direction[1] !== null) {
         if (checkOverlap(unit, direction[1])) {
           let validDirectionsForUnit = removeSelfForChecking(direction)
-          let validDirectionsForDirection = removeSelfForChecking(unit)
           let unitsToBeDestroyedU = detect(unit, validDirectionsForUnit)
-          // let unitsToBeDestroyedD = detect(direction[1].color, validDirectionsForDirection)
           console.log(unitsToBeDestroyedU)
-          if (unitsToBeDestroyedU.length >= 3) {
+          console.log(unitsToBeDestroyedU.length)
+          if (unitsToBeDestroyedU.length >= 2) {
+            console.log('aaa')
+            unit.kill()
+
             unitsToBeDestroyedU.forEach(unit => unit.kill())
           }
         }

@@ -1,30 +1,34 @@
 
 export default (unit, directions) => {
-  // console.log('detect called')
+  console.log('detect called')
   let returnArr = []
   if (directions.up && directions.down) {
     if (directions.up.color === unit.color && directions.down.color === unit.color) {
-      let unitsUp = [unit, directions.up]
+      console.log('updown called')
+      let unitsUp = [directions.up]
       let unitsDown = [directions.down]
-      returnArr = countUnitsInLine(unitsUp, 'up').concat(countUnitsInLine(unitsDown, 'down'))
+      returnArr = unitsInLine(unitsUp, 'up').concat(unitsInLine(unitsDown, 'down'))
+      // console.log(returnArr)
     }
   }
   if (directions.left && directions.right) {
     if (directions.left.color === unit.color && directions.right.color === unit.color) {
-      let unitsLeft = [unit, directions.left]
+      console.log('leftright called')
+      let unitsLeft = [directions.left]
       let unitsRight = [directions.right]
-      returnArr = countUnitsInLine(unitsLeft, 'left') + countUnitsInLine(unitsRight, 'right')
+      returnArr = unitsInLine(unitsLeft, 'left').concat(unitsInLine(unitsRight, 'right'))
+      console.log(returnArr)
     }
   }
   Object.entries(directions).forEach(neighbor => {
     if (unit.color === neighbor[1].color) {
-      let units = [unit, neighbor[1]]
-      returnArr = countUnitsInLine(units, neighbor[0])
+      let units = [neighbor[1]]
+      returnArr = unitsInLine(units, neighbor[0])
     }
   })
   return returnArr
 }
-const countUnitsInLine = (units, direction) => {
+const unitsInLine = (units, direction) => {
   let unit = units[units.length - 1]
   let neighborChecked = null
   switch (direction) {
@@ -53,5 +57,5 @@ const countUnitsInLine = (units, direction) => {
     return units
   }
   units.push(neighborChecked)
-  return countUnitsInLine(units, direction)
+  return unitsInLine(units, direction)
 }
